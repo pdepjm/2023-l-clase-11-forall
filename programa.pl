@@ -88,3 +88,71 @@ parejaSoniada(UnaPersona, OtraPersona):-
     forall(pariente(UnaPersona, Hijo), pariente(OtraPersona, Hijo)).
 
 %forall(Antecedente, Consecuente)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Posible resolución de TP4
+
+viveEnDreadbury(agatha).
+viveEnDreadbury(mayordomo).
+viveEnDreadbury(charles).
+
+matoA(Asesino, Victima):-
+    esOdiadoPor(Asesino, Victima),
+    not(esMasRicoQue(Victima, Asesino)),
+    viveEnDreadbury(Asesino).
+
+%esOdiadoPor(Odiador, Odiado)
+esOdiadoPor(charles, Odiado):-
+    viveEnDreadbury(Odiado),
+    not(esOdiadoPor(agatha, Odiado)).
+
+esOdiadoPor(agatha, Odiado):-
+    viveEnDreadbury(Odiado),
+    Odiado \= mayordomo.
+
+esOdiadoPor(mayordomo, Odiado):-
+    esOdiadoPor(agatha, Odiado).
+
+%esMasRicoQue(MenosRico, MasRico)
+esMasRicoQue(agatha, Alguien):-
+    viveEnDreadbury(Alguien),
+    not(esOdiadoPor(agatha, Alguien)).
+
+/*
+Consultas:
+
+1. ¿Quién mató a la tía Agatha? 
+?- matoA(Quien, agatha). 
+Quien = agatha
+
+2. ¿Existe alguien que odie a milhouse?
+?- esOdiadoPor(_, milhouse).
+false
+
+¿A quién odia charles?
+?- esOdiadoPor(charles, Quien).
+Quien = mayordomo
+
+Nombre de quién odia a tía Agatha
+?- esOdiadoPor(Quien, agatha).
+Quien = agatha ;
+Quien = mayordomo.
+
+Todos los odiadores y sus odiados
+?- esOdiadoPor(Odiador, Odiado).
+Odiador = charles,
+Odiado = mayordomo ;
+Odiador = Odiado,
+Odiado = agatha ;
+Odiador = agatha,
+Odiado = charles ;
+Odiador = mayordomo,
+Odiado = agatha ;
+Odiador = mayordomo,
+Odiado = charles.
+
+¿Es cierto que el mayordomo odia a alguien?
+?- esOdiadoPor(mayordomo, _).
+true
+*/
